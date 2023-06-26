@@ -1,31 +1,24 @@
-import os
+from sqlalchemy import (Column, DateTime, Integer, String, ForeignKey)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-from sqlalchemy import (Column, DateTime, Integer, MetaData, String, Table,
-                        create_engine)
+Base = declarative_base()
 
-from databases import Database
 
-DATABASE_URI = os.getenv('DATABASE_URI')
+class Submission(Base):
+    __tablename__ = 'submission'
+    id = Column(Integer, primary_key=True)
+    admin_notes = Column(String)
+    created_on = Column(DateTime)
+    track = relationship("Track", back_populates="submission", uselist=False)
 
-engine = create_engine(DATABASE_URI)
-metadata = MetaData()
 
-submissions = Table(
-    'submissions',
-    metadata,
-    Column('id', int, primary_key=True),
-    Column('admin_notes', String),
-    Column('CreatedOn', DateTime)
-)
+class Track(Base):
+    __tablename__ = 'track'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    url = Column(String)
+    artist_name = Column(String)
+    submission_id = Column(Integer, ForeignKey('submission_id'))
+    submission = relationship("Submission", back_populates="track")
 
-tracks = Table(
-    'tracks',
-    metadata,
-    Column('id', Integer, primary_key=True),
-    Column('submission_id', Integer),
-    Column('name', String),
-    Column('url', String),
-    Column('artist_name', String)
-)
-
-databases = Database(DATABASE_URI)
