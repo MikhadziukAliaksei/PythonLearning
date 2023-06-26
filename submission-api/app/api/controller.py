@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException
-from models import CreateSubmissionRequest
-import db_manager
+from fastapi import APIRouter
+from .models import CreateSubmissionRequest
+from . import db_manager
 
 submissions = APIRouter()
 

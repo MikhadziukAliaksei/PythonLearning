@@ -1,17 +1,18 @@
-from database import Session
-from db import Submission, Track
-from models import CreateSubmissionRequest
+from .database import Session
+from .db import Submission, Track
+from .models import CreateSubmissionRequest
 
 
 def create_submission(payload: CreateSubmissionRequest):
     session = Session()
     track = Track(
-        name=CreateSubmissionRequest.Track.name,
-        url=CreateSubmissionRequest.Track.url,
-        artist_name=CreateSubmissionRequest.Track.artist_name)
-    submission = Submission(admin_notes=CreateSubmissionRequest.admin_notes, track=track)
+        name=payload.Track.name,
+        url=payload.Track.url,
+        artist_name=payload.Track.artist_name)
+    submission = Submission(admin_notes=payload.admin_notes, track=track)
     session.add(submission)
     session.commit()
+    session.refresh(submission)
     session.close()
     return submission.id
 

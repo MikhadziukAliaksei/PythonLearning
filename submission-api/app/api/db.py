@@ -19,6 +19,6 @@ class Track(Base):
     name = Column(String)
     url = Column(String)
     artist_name = Column(String)
-    submission_id = Column(Integer, ForeignKey('submission_id'))
+    submission_id = Column(Integer, ForeignKey('submission.id'))
     submission = relationship("Submission", back_populates="track")
 
